@@ -1,0 +1,34 @@
+# This is old code that is for when we run detection models.
+
+def acne_detect_with_areas(img_path):
+    # Read the image
+    img = cv2.imread(img_path)
+
+    # Pass the image through the detection model
+    detect_result = model(img)
+
+    # Work with the first detection result
+    first_result = detect_result[0]  # Extract the first result from the list
+
+    # Extract bounding boxes and class IDs
+    boxes = first_result.boxes  # Boxes object
+    class_ids = boxes.cls.cpu().numpy()  # Class IDs as a NumPy array
+    confidences = boxes.conf.cpu().numpy()  # Confidence scores
+
+    # Extract bounding box coordinates
+    xyxy = boxes.xyxy.cpu().numpy()  # Coordinates as [x_min, y_min, x_max, y_max]
+
+    # Calculate areas for "Acne" class (assuming class ID 0 is "Acne")
+    acne_areas = []
+    for i, class_id in enumerate(class_ids):
+        if class_id == 0:  # Check if detection is "Acne"
+            x_min, y_min, x_max, y_max = xyxy[i]
+            area = (x_max - x_min) * (y_max - y_min)  # Calculate area
+            acne_areas.append(area)
+
+    # Plot the detections
+    detect_img = first_result.plot()
+    detect_img = cv2.cvtColor(detect_img, cv2.COLOR_BGR2RGB)
+
+    return detect_img, acne_areas
+

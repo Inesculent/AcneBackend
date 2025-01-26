@@ -1,0 +1,1 @@
+SELECT COUNT(*) AS c FROM user_data WHERE user_id =
