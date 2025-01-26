@@ -18,6 +18,7 @@ Video Demo
 
 
 **Overview**
+-----------------
 
 Segmentation with efficientnet-b1 backbone on approx ~400 images. We use dice coeff with binary segmentation to classify the acne "cells" on our dataset.
 
