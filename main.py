@@ -1,4 +1,3 @@
-#Libraries
 import os
 from contextlib import asynccontextmanager
 
@@ -26,7 +25,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import mysql.connector
 from mysql.connector import pooling
 
-# Declare here such that we don't need to
+# Declare here such that we don't need to redeclare every execution
 model = None
 pool = None
 
@@ -48,7 +47,7 @@ async def lifespan(app: FastAPI):
     # Load the database pool
     pool = pooling.MySQLConnectionPool(
         pool_name="mypool",
-        pool_size=5,  # Number of connections in the pool
+        pool_size=5, 
         pool_reset_session=True,
         host=os.getenv("DB_HOST"),
         user=os.getenv("DB_USER"),
@@ -59,10 +58,10 @@ async def lifespan(app: FastAPI):
 
     print("Database successfully loaded")
 
-    # Yield control to indicate successful startup
+
     yield
 
-    # Cleanup logic (if needed) goes here
+    # When shutting down
     print("Application is shutting down")
 
 def get_cursor():
@@ -82,7 +81,7 @@ app = FastAPI(lifespan=lifespan)
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace with your frontend's URL
+    allow_origins=["*"],  # Will be http://localhost:5000/ for our backend, change as necessary
     allow_credentials=True,
     allow_methods=["*"],  # Allow all methods
     allow_headers=["*"],  # Allow all headers
